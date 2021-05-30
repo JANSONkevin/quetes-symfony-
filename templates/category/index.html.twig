@@ -3,10 +3,11 @@
 {% block title %}All categories{% endblock %}
 
 {% block body %}
+<div class="text-center m-5">
     <h1>Toutes les Catégories de la table category : </h1>
     {% for category in categories %}
         <div>
-            <a href="{{ path("category_show", { categoryName: category.name }) }}"><h2>{{ loop.index }} / Catégorie : {{ category.name }} </h2></a>
+            <a href="{{ path("category_show", { categoryName: category.name }) }}" class="m-3"><h2>{{ loop.index }} / Catégorie : {{ category.name }} </h2></a>
         </div>
     {% else %}
         Aucune Catégorie trouvée.
@@ -15,4 +16,5 @@
     <a href="{{ path('app_index') }}">
         Retour à l'accueil
     </a>
+</div>
 {% endblock %}
