@@ -22,7 +22,9 @@
     {% endfor %}
         </div>
     </div>
-    <a href="{{ path('app_index') }}">
-        Retour à l'accueil
-    </a>
+    <div class="text-center m-3">
+        <a href="{{ path('app_index') }}"><h3>Retour à l'accueil</h3></a>
+        </br>
+        <a href="{{ path('program_new') }}"><h3>Ajouter une serie</h3></a>
+    </div>
 {% endblock %}
