@@ -16,6 +16,9 @@
     {% else %}
       <li class="list-group-item ">Aucun épisode trouvé.</li>
     {% endfor %}
+    <a class="m-3" href="{{ path('episode_new') }}">
+      Ajouter un episode
+    </a>
     <a href="{{ path("program_show", { id: program.id }) }}">
       Retour à la fiche du programme
     </a>
