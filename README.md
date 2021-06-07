@@ -39,3 +39,7 @@ https://youtu.be/rGedIpHNmUc
 
 lien vers la video de la quete 18:
 https://youtu.be/OZNsWwgoe2k
+
+
+lien vers la video de la quete 19:
+https://youtu.be/p1f66FZBtgk
