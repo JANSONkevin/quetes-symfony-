@@ -35,3 +35,7 @@ https://youtu.be/XtYRd3MOZok
 
 lien vers la video de la quete 17:
 https://youtu.be/rGedIpHNmUc
+
+
+lien vers la video de la quete 18:
+https://youtu.be/OZNsWwgoe2k

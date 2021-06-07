@@ -7,7 +7,7 @@
     <h1>{{ actor.name }}</h1>
     <h3>Series :</h3>
     {% for program in programs %}
-    <a href="{{ path("program_show", { id: program.id }) }}"><p>{{ program.title }}</p></a> 
+    <a href="{{ path("program_show", { slug: program.slug }) }}"><p>{{ program.title }}</p></a> 
     {% else %}  
     <p>no programs found</p>
     {% endfor %}

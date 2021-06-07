@@ -7,15 +7,24 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use App\Service\Slugify;
 
 class ProgramFixtures extends Fixture implements DependentFixtureInterface
 {
+    private $input;
+
+    public function __construct(Slugify $input)
+    {
+        $this->input = $input;
+    }
+
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create();
         for ($i=0; $i <= 15 ; $i++) { 
             $program = new Program();
             $program->setTitle($faker->word());
+            $program->setSlug($this->input->generate($program->getTitle()));
             $program->setSummary($faker->paragraph());
             $program->setPoster($faker->imageUrl(640, 480, 'animals', true));
             $program->setCategory($this->getReference('category_' . $faker->numberBetween(0, 4)));
