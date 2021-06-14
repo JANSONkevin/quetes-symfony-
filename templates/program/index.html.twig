@@ -3,7 +3,10 @@
 {% block title %}All programs{% endblock %}
 
 {% block body %}
-    <h1>Toutes les séries de la table program : </h1>
+{% if app.user %}
+<h1>Bonjour {{ app.user.email }}</h1>
+{% endif %}
+    <h2>Toutes les séries de la table program : </h2>
     <div class="container-fluide">
         <div class="row">
     {% for program in programs %}

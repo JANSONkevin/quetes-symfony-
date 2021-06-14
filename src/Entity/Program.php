@@ -32,7 +32,10 @@ class Program
     /**
      * @ORM\Column(type="text")
      * @Assert\NotBlank(message="ne me laisse pas tout vide")
-     * @Assert\NotEqualTo("plus belle la vie", message="On parle de vraies séries ici")
+     * @Assert\Regex(
+     *      pattern="/plus belle la vie/",
+     *      match=false,
+     *      message="On parle de vraies séries ici")
      */
     private $summary;
 
