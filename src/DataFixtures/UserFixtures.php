@@ -26,6 +26,7 @@ class UserFixtures extends Fixture
             $contributor,
             'contributorpassword'
         ));
+        $this->addReference('user', $contributor);
 
         $manager->persist($contributor);
 

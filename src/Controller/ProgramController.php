@@ -16,6 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * @Route("/programs", name="program_")
@@ -36,10 +37,10 @@ class ProgramController extends AbstractController
         ]);
     }
 
-     /**
+    /**
      * @Route("/new", name="new")
      */
-    public function new(Request $request, Slugify $slugify, MailerInterface $mailer) : Response
+    public function new(Request $request, Slugify $slugify, MailerInterface $mailer): Response
     {
         $program = new Program();
         $form = $this->createForm(ProgramType::class, $program);
@@ -48,6 +49,7 @@ class ProgramController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $slug = $slugify->generate($program->getTitle());
             $program->setSlug($slug);
+            $program->setOwner($this->getUser());
             $entityManager->persist($program);
             $entityManager->flush();
 
@@ -57,7 +59,7 @@ class ProgramController extends AbstractController
                 ->subject('Une nouvelle série vient d\'être publiée !')
                 ->html($this->renderView('Program/newProgramEmail.html.twig', ['program' => $program]));
 
-        $mailer->send($email);
+            $mailer->send($email);
             return $this->redirectToRoute('program_index');
         }
         // Render the form
@@ -80,6 +82,33 @@ class ProgramController extends AbstractController
     }
 
     /**
+     * @Route("/{slug}/edit", name="edit", methods={"GET","POST"})
+     */
+    public function edit(Request $request, Program $program): Response
+    {
+        $form = $this->createForm(ProgramType::class, $program);
+        $form->handleRequest($request);
+
+        // Check wether the logged in user is the owner of the program
+        if (!($this->getUser() == $program->getOwner())) {
+            // If not the owner, throws a 403 Access Denied exception
+            throw new AccessDeniedException('Only the owner can edit the program!');
+        }
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('program_index');
+        }
+
+        return $this->render('program/edit.html.twig', [
+            'program' => $program,
+            'form' => $form->createView(),
+        ]);
+    }
+
+
+    /**
      * @Route ("/{program_slug}/seasons/{season_id}", name="season_show")
      * @ParamConverter("program", class="App\Entity\Program", options={"mapping": {"program_slug": "slug"}})
      * @ParamConverter("season", class="App\Entity\Season", options={"mapping": {"season_id": "id"}})
@@ -96,7 +125,7 @@ class ProgramController extends AbstractController
         ]);
     }
 
-     /**
+    /**
      * @Route ("/{program_slug}/seasons/{season_id}/episodes/{episode_slug}", name="episode_show")
      * @ParamConverter("program", class="App\Entity\Program", options={"mapping": {"program_slug": "slug"}})
      * @ParamConverter("season", class="App\Entity\Season", options={"mapping": {"season_id": "id"}})
@@ -123,5 +152,21 @@ class ProgramController extends AbstractController
             'episode' => $episode,
             'form' => $form->createView(),
         ]);
+    }
+
+    #[Route('/{id}', name: 'delete', methods: ['POST'])]
+    public function delete(Request $request, Program $program): Response
+    {
+        if (!($this->getUser() == $program->getOwner())) {
+            throw new AccessDeniedException('Only the owner can delete the program!');
+        }
+
+        if ($this->isCsrfTokenValid('delete' . $program->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($program);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('program_index');
     }
 }

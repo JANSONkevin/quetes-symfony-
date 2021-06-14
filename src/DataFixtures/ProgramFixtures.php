@@ -31,6 +31,7 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
             for ($j=0; $j < count(ActorFixtures::ACTORS); $j++) {
                 $program->addActor($this->getReference('actor_' . $j));
             }
+            $program->setOwner($this->getReference('user'));
             $manager->persist($program);
             $this->addReference('program_' . $i, $program);
         }
@@ -42,6 +43,7 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
         return [
           ActorFixtures::class,
           CategoryFixtures::class,
+          UserFixtures::class,
         ];
     }
 }
