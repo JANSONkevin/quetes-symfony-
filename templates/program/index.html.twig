@@ -1,36 +1,47 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}All programs{% endblock %}
+{% block title %}All programs
+{% endblock %}
 
 {% block body %}
-{% if app.user %}
-<h1>Bonjour {{ app.user.email }}</h1>
-{% endif %}
-    <h2>Toutes les séries de la table program : </h2>
-    <div class="container-fluide">
-        <div class="row">
-    {% for program in programs %}
-        <div class="col-lg-2 col-md-4">
-            <div class="card col m-3" style="width: 18rem;">
-                <img src="{{program.poster}}" class="card-img-top" style="height: 300px;" alt="{{ program.title }}">
-                <div class="card-body">
-                    <h5 class="card-title">{{ program.title }}</h5>
-                    <p class="card-text">{{ program.summary|slice(0, 80) }}...</p>
-                    <a href="{{ path("program_show", { slug: program.slug }) }}" class="btn btn-primary">Voir la fiche</a>
-                {% if is_granted("ROLE_CONTRIBUTOR") %}
-                    <a href="{{ path('program_edit', { 'slug': program.slug} ) }}">Éditer</a>
-                {% endif %}
-                </div>
-              </div>
-            </div>
-    {% else %}
-        Aucune série trouvée.
-    {% endfor %}
-        </div>
-    </div>
-    <div class="text-center m-3">
-        <a href="{{ path('app_index') }}"><h3>Retour à l'accueil</h3></a>
-        </br>
-        <a href="{{ path('program_new') }}"><h3>Ajouter une serie</h3></a>
-    </div>
-{% endblock %}
+	{% if app.user %}
+		<h1>Bonjour
+			{{ app.user.email }}</h1>
+	{% endif %}
+	<h2>Toutes les séries :</h2>
+	<div class="d-flex justify-content-center text-center">
+		{{ form_start(form) }}
+		{{ form_widget(form) }}
+		<button>Search</button>
+		{{ form_end(form) }}
+	</div>
+	<div class="container-fluide">
+		<div class="row">
+			{% for program in programs %}
+				<div class="col-lg-2 col-md-4">
+					<div class="card col m-3" style="width: 18rem;">
+						<img src="{{program.poster}}" class="card-img-top" style="height: 300px;" alt="{{ program.title }}">
+						<div class="card-body">
+							<h5 class="card-title">{{ program.title }}</h5>
+							<p class="card-text">{{ program.summary|slice(0, 80) }}...</p>
+							<a href="{{ path("program_show", { slug: program.slug }) }}" class="btn btn-primary">Voir la fiche</a>
+							{% if is_granted("ROLE_CONTRIBUTOR") %}
+								<a href="{{ path('program_edit', { 'slug': program.slug} ) }}">Éditer</a>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			{% else %}
+				Aucune série trouvée.
+			{% endfor %}
+		</div>
+	</div>
+	<div class="text-center m-3">
+		<a href="{{ path('app_index') }}">
+			<h3>Retour à l'accueil</h3>
+		</a>
+	</br>
+	<a href="{{ path('program_new') }}">
+		<h3>Ajouter une serie</h3>
+	</a>
+</div>{% endblock %}

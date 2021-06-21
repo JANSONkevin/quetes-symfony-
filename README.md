@@ -55,3 +55,7 @@ https://youtu.be/jHnISkwz9ak
 
 lien vers la video de la quete 22:
 https://youtu.be/KXZ5NPqUGPM
+
+
+lien vers la video de la quete 23:
+https://youtu.be/q96acAncIpY
